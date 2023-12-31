@@ -16,3 +16,9 @@ export function binaryValidate(digits) {
 
   return reg.test(digits);
 }
+
+export function controlRange(max, min, value) {
+  if (value > max) value = max;
+  if (value < min) value = min;
+  return value;
+}
