@@ -1,18 +1,18 @@
 import { describe, expect, test } from "vitest";
-import { binaryValidate, bin2Dec } from "../utils";
+import { validateBinary, bin2Dec } from "../utils";
 
-describe("binaryValidate test", () => {
+describe("validateBinary test", () => {
   test("if input is empty, return false", () => {
-    expect(binaryValidate("")).toBe(false);
+    expect(validateBinary("")).toBe(false);
   });
   test("if input is letters, return false", () => {
-    expect(binaryValidate("kwqekfwq")).toBe(false);
+    expect(validateBinary("kwqekfwq")).toBe(false);
   });
   test("if input is binary, return true", () => {
-    expect(binaryValidate("0101001")).toBe(true);
+    expect(validateBinary("0101001")).toBe(true);
   });
   test("If the single number entered is greater than 1, return false", () => {
-    expect(binaryValidate("221345")).toBe(false);
+    expect(validateBinary("221345")).toBe(false);
   });
 });
 

@@ -1,7 +1,7 @@
 // 1. 不能使用数组存储输入的二进制数
 // 2. 如果输入错误给出错误提示
 import { useState } from "react";
-import { binaryValidate, bin2Dec } from "../utils";
+import { validateBinary, bin2Dec } from "../utils";
 
 function Bin2Dec() {
   const errorMap = new Map([["inputError", "Only 0 or 1 can be entered"]]);
@@ -21,7 +21,7 @@ function Bin2Dec() {
       return;
     }
 
-    let validate = binaryValidate(value);
+    let validate = validateBinary(value);
 
     if (!validate) {
       setDecimal("");
