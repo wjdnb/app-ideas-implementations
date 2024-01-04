@@ -6,7 +6,7 @@
 // 6. 专门有一个按钮更改当前数字的正负
 // 7. 包含小数点，可以进行小数运算
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { isNumber } from "../utils";
 
 function Calculator() {
