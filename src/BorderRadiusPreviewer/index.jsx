@@ -86,11 +86,11 @@ function BorderRadiusPreviewer() {
 
   return (
     <div
-      className="flex-col"
       onMouseUp={handleMouseUp}
       onMouseMove={handleMouseMove}
+      className="flex flex-col items-center"
     >
-      <div className="border-dashed border-gray-400 border-2">
+      <div className="border-dashed border-gray-400 border-2 w-96 h-96">
         <div
           id="target"
           className="w-96 h-96 bg-gradient-to-r from-cyan-400 to-blue-400 relative"

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-
+import NormalButton from "../Components/Button";
 // 1. 实现1个表单，包括事件名，日期，具体时间，开始按钮
 // 2. 验证输入项，如果事件名称为空，输入日期错误，时间错误会警告
 // 3. 点击开始开始倒计时
@@ -114,9 +114,7 @@ function CountdownTimer() {
           value={formData.time}
           onChange={handleChange}
         />
-        <button className="col-span-2 border boder-grey-400 p-4" type="submit">
-          开始
-        </button>
+        <NormalButton type="submit">开始</NormalButton>
       </form>
 
       <div>

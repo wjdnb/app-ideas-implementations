@@ -37,7 +37,7 @@ function Bin2Dec() {
 
   return (
     <div className="text-center">
-      <div className="text-4xl mt-64 font-mono tracking-tight">
+      <div className="text-4xl font-mono tracking-tight">
         Binary to Decimal Converter
       </div>
       <div className="text-lg mt-3">Enter a binary number</div>

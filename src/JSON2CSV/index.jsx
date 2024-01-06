@@ -6,7 +6,7 @@
 // 5. 实现打开按钮，可以读取 csv 文件并加载到文本框
 // 6. 可以将 csv 数据转化为 JSON
 
-import NormalButton from "./Button";
+import NormalButton from "../Components/Button";
 import { useState } from "react";
 
 function JSON2CSV() {
