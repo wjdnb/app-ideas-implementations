@@ -28,3 +28,26 @@ export function isNumber(str) {
 
   return reg.test(str);
 }
+
+export function handleCopy(text) {
+  if (!text) {
+    alert("没有复制内容");
+    return;
+  }
+
+  // 添加事件监听器的函数
+  const copyFunction = async (e) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      alert("复制成功！");
+    } catch (err) {
+      alert("复制失败: " + err);
+    }
+
+    // 可选：在复制后移除监听器
+    document.body.removeEventListener("click", copyFunction);
+  };
+
+  // 添加监听器到 document.body
+  document.body.addEventListener("click", copyFunction);
+}

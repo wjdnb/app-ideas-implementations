@@ -7,19 +7,38 @@
 // 6. 可以将 csv 数据转化为 JSON
 
 import NormalButton from "../Components/Button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { handleCopy } from "../utils";
 
 function JSON2CSV() {
   const [originalData, setOriginalData] = useState("");
   const [transformData, setTransformData] = useState("");
 
-  // 判断数据类型
-  const getDataType = (str) => {
-    if (isCSV(str)) return "CSV";
-    if (isJSON(str)) return "JSON";
+  useEffect(() => {
+    document
+      .getElementById("file")
+      .addEventListener("change", function (event) {
+        let files = event.target.files;
+        if (files.length === 0) {
+          console.log("No file is selected");
+          return;
+        }
 
-    return "error";
-  };
+        let file = files[0];
+        let reader = new FileReader();
+
+        reader.onload = function (fileLoadEvent) {
+          let content = fileLoadEvent.target.result;
+          setOriginalData(content); // 假设你想将读取的内容设置为 originalData
+        };
+
+        reader.onerror = function (error) {
+          console.log("Error reading file:", error);
+        };
+
+        reader.readAsText(file);
+      });
+  }, []);
 
   const isCSV = (str) => {
     let rows = str.split("\n");
@@ -70,7 +89,7 @@ function JSON2CSV() {
       newArr.push(obj);
     }
 
-    console.log(newArr);
+    setTransformData(JSON.stringify(newArr));
   }
 
   function handleJSON2CSV() {
@@ -91,12 +110,13 @@ function JSON2CSV() {
       }
     }
 
-    console.log(key);
     let CSV = `${key.join(",")}\n`;
-    console.log(CSV);
+
     arr.forEach((item) => {
       CSV += `${Object.values(item).join(",")}\n`;
     });
+
+    setTransformData(CSV);
   }
 
   function handleClick(type) {
@@ -109,6 +129,37 @@ function JSON2CSV() {
 
   const handleChange = (e) => {
     setOriginalData(e.target.value);
+  };
+
+  const clearData = () => {
+    setOriginalData("");
+    setTransformData("");
+  };
+
+  const handleReadFile = () => {
+    document.getElementById("file").click();
+  };
+
+  const handleSaveFile = () => {
+    let fileName = "store.txt";
+    let fileContent = transformData;
+    if (!transformData) {
+      alert("没有保存内容");
+      return;
+    }
+
+    let blob = new Blob([fileContent], { type: "text/plain" });
+    let fileUrl = URL.createObjectURL(blob);
+
+    let tempLink = document.createElement("a");
+    tempLink.href = fileUrl;
+    tempLink.download = fileName;
+    document.body.appendChild(tempLink);
+    tempLink.click();
+
+    // 移除临时链接，并释放 blob URL
+    document.body.removeChild(tempLink);
+    URL.revokeObjectURL(fileUrl);
   };
 
   return (
@@ -142,10 +193,19 @@ function JSON2CSV() {
           readOnly
         ></textarea>
       </div>
-      <NormalButton>清除</NormalButton>
-      <NormalButton>复制</NormalButton>
-      <NormalButton>读取文件</NormalButton>
-      <NormalButton>保存到本地</NormalButton>
+      <div className="flex justify-between">
+        <div>
+          <NormalButton onClick={clearData}>清除</NormalButton>
+          <NormalButton onClick={handleReadFile}>读取文件</NormalButton>
+          <input type="file" id="file" className="invisible" />
+        </div>
+        <div>
+          <NormalButton onClick={() => handleCopy(transformData)}>
+            复制
+          </NormalButton>
+          <NormalButton onClick={handleSaveFile}>保存到本地</NormalButton>
+        </div>
+      </div>
     </div>
   );
 }

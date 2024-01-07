@@ -4,11 +4,12 @@ import { useState } from "react";
 function Navbar() {
   // 文件名
   let name = [
-    "BorderRadiusPreviewer",
-    "Bin2Dec",
+    "Border Radius Previewer",
+    "Bin to Dec",
     "Calculator",
-    "CountdownTimer",
-    "JSON2CSV",
+    "Countdown Timer",
+    "JSON to CSV",
+    "Dynamic CSS Var",
   ];
 
   // 路由名
@@ -18,21 +19,17 @@ function Navbar() {
     "calculator",
     "countdown-timer",
     "json-to-csv",
+    "dynamic-css-var",
   ];
 
   const [activeName, setActiveName] = useState("");
 
   const navigate = useNavigate();
 
-  const transformDisplayName = (str) => {
-    // Replace camel case with space and '2' with ' To '
-    return str.replace(/([a-z])([A-Z])/g, "$1 $2").replace(/2/g, " to ");
-  };
-
   const list = name.map((item, index) => {
     return {
       routeName: routeName[index],
-      diaplayName: transformDisplayName(item),
+      diaplayName: item,
     };
   });
 

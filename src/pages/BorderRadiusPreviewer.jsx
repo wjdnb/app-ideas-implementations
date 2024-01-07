@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { controlRange } from "../utils";
+import { controlRange, handleCopy } from "../utils";
+import NormalButton from "../Components/Button";
 
 function BorderRadiusPreviewer() {
   const [radius, setRadius] = useState("30% 70% 75% 25% / 25% 50% 75% 50%"); // preset
@@ -77,13 +78,6 @@ function BorderRadiusPreviewer() {
     setIsDraggable(false);
   }
 
-  function handleCopy() {
-    document.body.addEventListener("click", async (e) => {
-      await navigator.clipboard.writeText(radius);
-      alert("复制成功！");
-    });
-  }
-
   return (
     <div
       onMouseUp={handleMouseUp}
@@ -93,7 +87,7 @@ function BorderRadiusPreviewer() {
       <div className="border-dashed border-gray-400 border-2 w-96 h-96">
         <div
           id="target"
-          className="w-96 h-96 bg-gradient-to-r from-cyan-400 to-blue-400 relative"
+          className="w-96 h-96 bg-gradient-to-r from-violet-500 to-fuchsia-500 relative"
           style={{ borderRadius: radius }}
         >
           <span
@@ -119,16 +113,11 @@ function BorderRadiusPreviewer() {
         </div>
       </div>
       <div className="text-center  m-16 flex items-center text-gray-100 font-medium">
-        <span className="m-3 text-2xl text-gray-700 ">border-radius:</span>
-        <span className="bg-gradient-to-r from-cyan-400 to-blue-400 p-3 rounded text-3xl">
+        <span className="m-3 text-xl text-gray-700 ">border-radius:</span>
+        <span className="bg-gradient-to-r from-violet-500 to-fuchsia-500 p-2 rounded text-xl">
           {radius}
         </span>
-        <span
-          className="m-3 p-3 text-2xl bg-gradient-to-r from-cyan-400 to-blue-400 cursor-pointer rounded"
-          onClick={handleCopy}
-        >
-          Copy
-        </span>
+        <NormalButton onClick={() => handleCopy(radius)}>Copy</NormalButton>
       </div>
     </div>
   );
