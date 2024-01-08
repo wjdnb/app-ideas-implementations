@@ -5,9 +5,9 @@ import { navbar as data } from "./utils/data";
 
 function App() {
   return (
-    <div>
+    <div className="relative">
       <Header />
-      <div className="flex h-screen w-screen pt-16">
+      <div className="flex pt-32">
         <Navbar nav={data} />
         <div className="flex justify-center flex-1">
           <Outlet />

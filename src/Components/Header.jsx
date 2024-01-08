@@ -6,7 +6,7 @@ function Header() {
   };
 
   return (
-    <div className="h-14 flex items-center justify-end border-b shadow">
+    <div className="flex items-center justify-end border-b shadow h-14 fixed top-0 left-0 right-0 z-10 bg-white">
       <div className="mr-10">
         <div className="cursor-pointer">
           <GithubOne
