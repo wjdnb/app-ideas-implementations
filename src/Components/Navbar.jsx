@@ -1,37 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-
-function Navbar() {
+function Navbar({ nav }) {
   // 文件名
-  let name = [
-    "Border Radius Previewer",
-    "Bin to Dec",
-    "Calculator",
-    "Countdown Timer",
-    "JSON to CSV",
-    "Dynamic CSS Var",
-  ];
-
-  // 路由名
-  let routeName = [
-    "border-radius-previewer",
-    "bin-to-dec",
-    "calculator",
-    "countdown-timer",
-    "json-to-csv",
-    "dynamic-css-var",
-  ];
 
   const [activeName, setActiveName] = useState("");
 
   const navigate = useNavigate();
-
-  const list = name.map((item, index) => {
-    return {
-      routeName: routeName[index],
-      diaplayName: item,
-    };
-  });
 
   const handleRoute = (routeName) => {
     setActiveName(routeName);
@@ -40,7 +14,7 @@ function Navbar() {
 
   return (
     <div className="pl-32 pr-16 text-sm text-gray-600">
-      {list.map((item, index) => (
+      {nav.map((item, index) => (
         <div
           key={index}
           onClick={() => handleRoute(item.routeName)}
@@ -50,7 +24,7 @@ function Navbar() {
               : "border-l-gray-200"
           } cursor-pointer pl-4 hover:border-l-gray-400 hover:text-blue-700`}
         >
-          {item.diaplayName}
+          {item.navName}
         </div>
       ))}
     </div>
