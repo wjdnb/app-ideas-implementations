@@ -37,10 +37,8 @@ function Bin2Dec() {
 
   return (
     <div className="text-center">
-      <div className="text-4xl font-mono tracking-tight">
-        Binary to Decimal Converter
-      </div>
-      <div className="text-lg mt-3">Enter a binary number</div>
+      <div className="text-4xl font-mono tracking-tight">二进制转十进制</div>
+      <div className="text-lg mt-3">输入二进制数字</div>
       <div className="text-base mb-3 text-red-600 h-6">
         {isErrorMessageVisible ? errorMessage : ""}
       </div>
