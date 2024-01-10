@@ -28,10 +28,6 @@ export const navbar = [
     routeName: "html-editor",
   },
   {
-    navName: "Promodoro Clock",
-    routeName: "promodoro-clock",
-  },
-  {
     navName: "Markdown Previewer",
     routeName: "markdown-previewer",
   },

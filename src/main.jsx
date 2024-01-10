@@ -9,7 +9,6 @@ import JSON2CSV from "./pages/JSON2CSV";
 import FlipImage from "./pages/FlipImage";
 import HTMLEditor from "./pages/HTMLEditor";
 import MarkdownPreviewer from "./pages/MarkdownPreviewer";
-import PromodoroClock from "./pages/PromodoroClock";
 import "normalize.css";
 import "./tailwind.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -26,7 +25,6 @@ const router = createBrowserRouter([
       { path: "json-to-csv", element: <JSON2CSV /> },
       { path: "flip-image", element: <FlipImage /> },
       { path: "html-editor", element: <HTMLEditor /> },
-      { path: "promodoro-clock", element: <PromodoroClock /> },
       { path: "markdown-previewer", element: <MarkdownPreviewer /> },
     ],
   },
