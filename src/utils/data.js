@@ -28,7 +28,7 @@ export const navbar = [
     routeName: "html-editor",
   },
   {
-    navName: "Markdown Previewer",
-    routeName: "markdown-previewer",
+    navName: "Memory Game",
+    routeName: "memory-game",
   },
 ];

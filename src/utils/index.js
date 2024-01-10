@@ -51,3 +51,31 @@ export function handleCopy(text) {
   // 添加监听器到 document.body
   document.body.addEventListener("click", copyFunction);
 }
+
+export function extractRotateValues(transformString) {
+  const rotateXMatch = transformString.match(/rotateX\((-?\d+\.?\d*)deg\)/);
+  const rotateYMatch = transformString.match(/rotateY\((-?\d+\.?\d*)deg\)/);
+
+  const rotateX = rotateXMatch ? parseFloat(rotateXMatch[1]) : 0;
+  const rotateY = rotateYMatch ? parseFloat(rotateYMatch[1]) : 0;
+
+  return { rotateX, rotateY };
+}
+
+export function generateUUID() {
+  return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, (c) =>
+    (
+      c ^
+      (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4)))
+    ).toString(16)
+  );
+}
+
+export function shuffle(arr) {
+  for (let i = 0; i < arr.length; i++) {
+    let random = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[random]] = [arr[random], arr[i]];
+  }
+
+  return arr;
+}

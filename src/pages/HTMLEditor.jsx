@@ -30,7 +30,7 @@ function HTMLEditor() {
 
   return (
     <div>
-      <div className="pb-4">修改代码实时渲染</div>
+      <div className="pb-4">代码实时渲染</div>
 
       <textarea
         cols="120"

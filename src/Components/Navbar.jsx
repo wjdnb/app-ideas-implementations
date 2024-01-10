@@ -13,7 +13,7 @@ function Navbar({ nav }) {
   };
 
   return (
-    <div className="pl-32 pr-16 text-sm text-gray-600">
+    <div className="pl-32 pr-16 text-sm text-gray-600 select-none">
       {nav.map((item, index) => (
         <div
           key={index}
