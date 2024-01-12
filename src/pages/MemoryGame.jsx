@@ -13,11 +13,10 @@ import { extractRotateValues, generateUUID, shuffle } from "../utils";
 import { useState, useEffect } from "react";
 
 function MemoryGame() {
-  const [matchStack, setMatchStack] = useState([]);
-  const [flipImage, setFlipImage] = useState([]);
-  const [completedStack, setCompletedStack] = useState([]);
+  const [pendingCard, setPendingCard] = useState({});
+  const [matchedCard, setMatchedCard] = useState([]);
   const [timer, setTimer] = useState("");
-  const [randomElement, setRandomElement] = useState([]);
+  const [cardList, setCardList] = useState([]);
 
   const componentsMap = {
     Poker: Poker,
@@ -45,20 +44,18 @@ function MemoryGame() {
     const iconName = [
       "Poker",
       "NintendoSwitch",
-      "Ghost",
-      "Game",
-      "Apple",
-      "WatermelonOne",
+      // "Ghost",
+      // "Game",
+      // "Apple",
+      // "WatermelonOne",
       // "Skull",
       // "Music",
     ];
 
     const shuffleArr = [...shuffle(iconName), ...shuffle(iconName)];
 
-    const initialRandomElement = shuffleArr.map((item) => {
-      // 这里需要的是一个组件而不是字符串，可以先用一个 map 映射一下
-
-      const Component = componentsMap[item];
+    const initialRandomCard = shuffleArr.map((item) => {
+      const Component = componentsMap[item]; // 这里需要的是一个组件而不是字符串，可以先用一个 map 映射一下
       const ComponentInstance = (
         <Component
           theme="outline"
@@ -68,59 +65,57 @@ function MemoryGame() {
           strokeLinecap="square"
         />
       );
+
+      const id = generateUUID();
       return {
-        id: generateUUID(),
-        frontName: item,
+        id,
+        cardName: item,
         front: ComponentInstance,
         back: defaultIcon,
       };
     });
 
-    setRandomElement(initialRandomElement);
+    setCardList(initialRandomCard);
   }, []);
 
   useEffect(() => {
-    if (
-      randomElement.length &&
-      completedStack.length === randomElement.length
-    ) {
-      alert("bingo");
+    if (cardList.length && matchedCard.length === cardList.length) {
+      setTimeout(() => {
+        alert("bingo");
+      }, 1000);
     }
-  }, [completedStack]);
+  }, [matchedCard]);
 
-  const handleClick = (event, frontName, id) => {
-    // 需要使用 currentTarget, 确保事件是在绑定了事件的元素触发
-    let currentTarget = event.currentTarget;
+  const handleClick = (event, cardName, id) => {
     event.preventDefault();
 
-    // 如果正在定时器事件内，不能点击
-    if (timer) return;
+    let currentTarget = event.currentTarget; // 需要使用 currentTarget, 确保事件是在绑定了事件的元素触发
 
-    // 如果已经匹配成功则不能反转
-    if (completedStack.includes(id)) return;
+    if (timer) return; // 如果正在定时器执行时间内，不能点击
 
-    rotateElement(currentTarget);
+    if (matchedCard.includes(id)) return; // 如果已经匹配成功则不能旋转
+
+    if (pendingCard.target === currentTarget) return; // 点击的对象是自己不能旋转
+
+    rorateCard(currentTarget);
 
     // 检查匹配栈
-    if (matchStack.length === 0) {
-      let newElement = {
-        target: currentTarget,
-        frontName,
+    if (!Object.keys(pendingCard).length) {
+      setPendingCard({
         id,
-      };
-      setMatchStack([newElement]);
-    } else if (matchStack.length === 1) {
-      let tempStack = [...matchStack];
-      let matchElement = tempStack.pop();
-      if (matchElement.frontName === frontName) {
-        setCompletedStack([...completedStack, matchElement.id, id]);
-        setMatchStack([]);
+        cardName,
+        target: currentTarget,
+      });
+    } else {
+      if (pendingCard.cardName === cardName) {
+        setMatchedCard([...matchedCard, pendingCard.id, id]);
+        setPendingCard({});
       } else {
-        setMatchStack([]);
+        setPendingCard({});
 
         const timer = setTimeout(() => {
-          rotateElement(currentTarget);
-          rotateElement(matchElement.target);
+          rorateCard(currentTarget);
+          rorateCard(pendingCard.target);
           clearTimeout(timer);
           setTimer("");
         }, 1000);
@@ -130,10 +125,10 @@ function MemoryGame() {
     }
   };
 
-  function rotateElement(currentTarget) {
+  function rorateCard(currentTarget) {
     let transform = currentTarget.style.transform;
-
     let { rotateX, rotateY } = extractRotateValues(transform);
+
     currentTarget.style.transform = `rotateX(${rotateX}deg) rotateY(${
       rotateY - 180
     }deg)`;
@@ -141,10 +136,10 @@ function MemoryGame() {
 
   return (
     <div className="grid grid-cols-4 grid-rows-4 gap-4 perspective-medium">
-      {randomElement.map((item) => (
+      {cardList.map((item) => (
         <div
           key={item.id}
-          onClick={(event) => handleClick(event, item.frontName, item.id)}
+          onClick={(event) => handleClick(event, item.cardName, item.id)}
           className="w-36 h-40 border relative preserve-3d transition duration-700 accelerate-3d select-none"
         >
           <div className="w-36 h-40 flex justify-center items-center absolute backface-hidden z-10 rotate-y-0">
