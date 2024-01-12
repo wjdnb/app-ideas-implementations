@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { UpTwo, DownTwo, RightTwo, LeftTwo } from "@icon-park/react";
-import NormalButton from "../components/Button";
-import { extractRotateValues } from "../utils";
+import NormalButton from "../Components/Button";
 
 function FlipImage() {
   const [address, setAddress] = useState(
@@ -12,74 +11,57 @@ function FlipImage() {
     "https://images.pexels.com/photos/2335126/pexels-photo-2335126.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
   );
 
+  const [isRotating, setIsRotating] = useState(false); // 控制在旋转过程中不能重复点击
+
+  const [rotation, setRotation] = useState({ rotateX: 0, rotateY: 0 });
+
   useEffect(() => {
     let image = document.getElementById("image");
-    image.addEventListener("error", function () {
-      alert("链接错误");
-    });
-  }, []);
 
-  const handleSrc = () => {
-    setAddress(inputValue);
-  };
+    const handleError = () => alert("链接错误");
+
+    image.addEventListener("error", handleError);
+
+    return () => {
+      image.removeEventListener("error", handleError);
+    };
+  }, []);
 
   const handleChange = (e) => {
     setInputValue(e.target.value);
   };
 
-  const extractRotateValues = (transformString) => {
-    const rotateXMatch = transformString.match(/rotateX\((-?\d+\.?\d*)deg\)/);
-    const rotateYMatch = transformString.match(/rotateY\((-?\d+\.?\d*)deg\)/);
+  const handleRotate = (axis, degrees) => {
+    if (!isRotating) {
+      setIsRotating(true);
+      setRotation((prevRotation) => {
+        const newRotation = {
+          rotateX: prevRotation.rotateX,
+          rotateY: prevRotation.rotateY,
+        };
 
-    const rotateX = rotateXMatch ? parseFloat(rotateXMatch[1]) : 0;
-    const rotateY = rotateYMatch ? parseFloat(rotateYMatch[1]) : 0;
+        if (axis === "x") {
+          newRotation.rotateX += degrees;
+        } else {
+          newRotation.rotateY += degrees;
+        }
 
-    return { rotateX, rotateY };
+        return newRotation;
+      });
+    }
   };
 
-  const clickUp = () => {
-    const element = document.getElementById("rotate");
-    let transform = element.style.transform;
-
-    let { rotateX, rotateY } = extractRotateValues(transform);
-
-    element.style.transform = `rotateX(${
-      rotateX + 180
-    }deg) rotateY(${rotateY}deg)`;
+  const handleTransitionEnd = () => {
+    setIsRotating(false);
   };
 
-  const clickDown = () => {
-    const element = document.getElementById("rotate");
-    let transform = element.style.transform;
+  const clickUp = () => handleRotate("x", 180);
 
-    let { rotateX, rotateY } = extractRotateValues(transform);
+  const clickDown = () => handleRotate("x", -180);
 
-    element.style.transform = `rotateX(${
-      rotateX - 180
-    }deg) rotateY(${rotateY}deg)`;
-  };
+  const clickLeft = () => handleRotate("y", -180);
 
-  const clickLeft = () => {
-    const element = document.getElementById("rotate");
-    let transform = element.style.transform;
-
-    let { rotateX, rotateY } = extractRotateValues(transform);
-
-    element.style.transform = `rotateX(${rotateX}deg) rotateY(${
-      rotateY - 180
-    }deg)`;
-  };
-
-  const clickRight = () => {
-    const element = document.getElementById("rotate");
-    let transform = element.style.transform;
-
-    let { rotateX, rotateY } = extractRotateValues(transform);
-
-    element.style.transform = `rotateX(${rotateX}deg) rotateY(${
-      rotateY + 180
-    }deg)`;
-  };
+  const clickRight = () => handleRotate("y", 180);
 
   return (
     <div className="mt-10">
@@ -137,6 +119,10 @@ function FlipImage() {
           <div
             id="rotate"
             className="relative preserve-3d transition duration-700 w-96 h-96 accelerate-3d"
+            style={{
+              transform: `rotateX(${rotation.rotateX}deg) rotateY(${rotation.rotateY}deg)`,
+            }}
+            onTransitionEnd={handleTransitionEnd}
           >
             <div className="w-96 h-96 absolute backface-hidden z-10 rotate-y-0">
               <img
@@ -159,7 +145,7 @@ function FlipImage() {
           value={inputValue}
           onChange={handleChange}
         />
-        <NormalButton onClick={handleSrc}>替换</NormalButton>
+        <NormalButton onClick={() => setAddress(inputValue)}>替换</NormalButton>
       </div>
     </div>
   );
