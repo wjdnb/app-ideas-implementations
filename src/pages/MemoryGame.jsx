@@ -9,13 +9,14 @@ import {
   Music,
   Press,
 } from "@icon-park/react";
-import { extractRotateValues, generateUUID, shuffle } from "../utils";
+import { generateUUID, shuffle } from "../utils";
 import { useState, useEffect } from "react";
 
 function MemoryGame() {
   const [pendingCard, setPendingCard] = useState({});
   const [matchedCard, setMatchedCard] = useState([]);
   const [timer, setTimer] = useState("");
+  const [cardRotateState, setCardRotateState] = useState({});
   const [cardList, setCardList] = useState([]);
 
   const componentsMap = {
@@ -30,27 +31,36 @@ function MemoryGame() {
     Press: Press,
   };
 
-  const defaultIcon = (
-    <Press
-      theme="outline"
-      size="96"
-      fill="#333"
-      strokeWidth={2}
-      strokeLinecap="square"
-    />
-  );
-
   useEffect(() => {
+    init();
+  }, []);
+
+  const init = () => {
+    const rotateState = initCardList();
+    initCardRotateState(rotateState);
+  };
+
+  const initCardList = () => {
     const iconName = [
       "Poker",
       "NintendoSwitch",
-      // "Ghost",
-      // "Game",
-      // "Apple",
-      // "WatermelonOne",
+      "Ghost",
+      "Game",
+      "Apple",
+      "WatermelonOne",
       // "Skull",
       // "Music",
     ];
+
+    const defaultIcon = (
+      <Press
+        theme="outline"
+        size="96"
+        fill="#333"
+        strokeWidth={2}
+        strokeLinecap="square"
+      />
+    );
 
     const shuffleArr = [...shuffle(iconName), ...shuffle(iconName)];
 
@@ -67,6 +77,7 @@ function MemoryGame() {
       );
 
       const id = generateUUID();
+
       return {
         id,
         cardName: item,
@@ -76,62 +87,78 @@ function MemoryGame() {
     });
 
     setCardList(initialRandomCard);
-  }, []);
+
+    return initialRandomCard;
+  };
+
+  const initCardRotateState = (rotateList) => {
+    const rotateState = {};
+    rotateList.forEach((item) => {
+      rotateState[item.id] = { rotateX: 0, rotateY: 0 };
+    });
+    setCardRotateState(rotateState);
+  };
 
   useEffect(() => {
-    if (cardList.length && matchedCard.length === cardList.length) {
-      setTimeout(() => {
+    if (
+      cardList.length &&
+      matchedCard.length &&
+      matchedCard.length === cardList.length
+    ) {
+      const timer = setTimeout(() => {
         alert("bingo");
+
+        initCardRotateState(cardList); // 旋转回到正面
+
+        let resetTimer = setTimeout(() => {
+          init();
+          setMatchedCard([]);
+          clearTimeout(resetTimer);
+        }, 1000);
+        clearTimeout(timer);
       }, 1000);
     }
   }, [matchedCard]);
 
-  const handleClick = (event, cardName, id) => {
-    event.preventDefault();
-
-    let currentTarget = event.currentTarget; // 需要使用 currentTarget, 确保事件是在绑定了事件的元素触发
-
+  const handleClick = (cardName, id) => {
     if (timer) return; // 如果正在定时器执行时间内，不能点击
 
     if (matchedCard.includes(id)) return; // 如果已经匹配成功则不能旋转
 
-    if (pendingCard.target === currentTarget) return; // 点击的对象是自己不能旋转
+    if (pendingCard.id === id) return; // 点击的对象是自己不能旋转
 
-    rorateCard(currentTarget);
+    rorateCard(id);
 
     // 检查匹配栈
     if (!Object.keys(pendingCard).length) {
       setPendingCard({
         id,
         cardName,
-        target: currentTarget,
       });
+    } else if (pendingCard.cardName === cardName) {
+      setMatchedCard([...matchedCard, pendingCard.id, id]);
+      setPendingCard({});
     } else {
-      if (pendingCard.cardName === cardName) {
-        setMatchedCard([...matchedCard, pendingCard.id, id]);
-        setPendingCard({});
-      } else {
-        setPendingCard({});
+      setPendingCard({});
 
-        const timer = setTimeout(() => {
-          rorateCard(currentTarget);
-          rorateCard(pendingCard.target);
-          clearTimeout(timer);
-          setTimer("");
-        }, 1000);
+      const timer = setTimeout(() => {
+        rorateCard(id);
+        rorateCard(pendingCard.id);
+        clearTimeout(timer);
+        setTimer("");
+      }, 1000);
 
-        setTimer(timer);
-      }
+      setTimer(timer);
     }
   };
 
-  function rorateCard(currentTarget) {
-    let transform = currentTarget.style.transform;
-    let { rotateX, rotateY } = extractRotateValues(transform);
-
-    currentTarget.style.transform = `rotateX(${rotateX}deg) rotateY(${
-      rotateY - 180
-    }deg)`;
+  function rorateCard(id) {
+    setCardRotateState((prev) => {
+      return {
+        ...prev,
+        [id]: { ...prev[id], rotateY: prev[id].rotateY - 180 },
+      };
+    });
   }
 
   return (
@@ -139,8 +166,13 @@ function MemoryGame() {
       {cardList.map((item) => (
         <div
           key={item.id}
-          onClick={(event) => handleClick(event, item.cardName, item.id)}
+          onClick={() => handleClick(item.cardName, item.id)}
           className="w-36 h-40 border relative preserve-3d transition duration-700 accelerate-3d select-none"
+          style={{
+            transform: `rotateX(${
+              cardRotateState[item.id]?.rotateX || 0
+            }deg) rotateY(${cardRotateState[item.id]?.rotateY || 0}deg)`,
+          }}
         >
           <div className="w-36 h-40 flex justify-center items-center absolute backface-hidden z-10 rotate-y-0">
             {item.back}
