@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import Title from "./components/Header.jsx";
-import Navbar from "./components/Navbar.jsx";
+import Title from "./components/Title";
+import Navbar from "./components/Navbar";
 import { navbar as data } from "./utils/data";
 
 function App() {
