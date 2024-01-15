@@ -1,6 +1,6 @@
 import { GithubOne } from "@icon-park/react";
 
-function Title() {
+function Header() {
   const handleRepo = () => {
     window.open("https://github.com/wjdnb/app-ideas-implementations");
   };
@@ -21,4 +21,4 @@ function Title() {
   );
 }
 
-export default Title;
+export default Header;
