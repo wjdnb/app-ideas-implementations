@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import Title from "./components/Title";
+import Title from "./components/title";
 import Navbar from "./components/Navbar";
 import { navbar as data } from "./utils/data";
 
