@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
-import Header from "./components/Header";
-import Navbar from "./components/Navbar";
+import Header from "./components/Header.jsx";
+import Navbar from "./components/Navbar.jsx";
 import { navbar as data } from "./utils/data";
 
 function App() {
