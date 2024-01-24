@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="relative">
       <Header />
-      <div className="flex pt-32">
+      <div className="flex pt-28">
         <Navbar nav={data} />
         <div className="flex justify-center flex-1">
           <Outlet />

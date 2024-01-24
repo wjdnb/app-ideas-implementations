@@ -24,11 +24,15 @@ export const navbar = [
     routeName: "flip-image",
   },
   {
+    navName: "Memory Game",
+    routeName: "memory-game",
+  },
+  {
     navName: "HTML Editor",
     routeName: "html-editor",
   },
   {
-    navName: "Memory Game",
-    routeName: "memory-game",
+    navName: "Draw",
+    routeName: "draw",
   },
 ];

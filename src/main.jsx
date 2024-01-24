@@ -9,6 +9,7 @@ import JSON2CSV from "./pages/JSON2CSV";
 import FlipImage from "./pages/FlipImage";
 import HTMLEditor from "./pages/HTMLEditor";
 import MemoryGame from "./pages/MemoryGame";
+import Draw from "./pages/Draw";
 import "normalize.css";
 import "./tailwind.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
@@ -24,8 +25,9 @@ const router = createBrowserRouter([
       { path: "calculator", element: <Calculator /> },
       { path: "json-to-csv", element: <JSON2CSV /> },
       { path: "flip-image", element: <FlipImage /> },
-      { path: "html-editor", element: <HTMLEditor /> },
       { path: "memory-game", element: <MemoryGame /> },
+      { path: "html-editor", element: <HTMLEditor /> },
+      { path: "draw", element: <Draw /> },
     ],
   },
 ]);
